@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
-import Clock from './components/clock/Clock'
+import Navbar from './components/navbar/Navbar'
+import 'bulma';
 
 function App() {
   return (
     <div className="App">
-      <Clock/>
+      <Navbar/>
     </div>
   );
 }
