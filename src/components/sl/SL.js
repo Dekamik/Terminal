@@ -44,37 +44,31 @@ class SL extends React.Component {
     }
 
     async refreshState() {
-        let departures = await this.getDepartures();
-        let nextDeparture = departures[0];
-        this.setState({
-            nextDeparture: {
-                timeToDeparture: nextDeparture.departure,
-                departureInfo: nextDeparture.line + " mot " + nextDeparture.endStation,
-                mode: "bus"
-            },
-            comingDepartures: departures.splice(1, 4),
-            deviations: [
-                { title: "Coronavirusutbrott", lines: "Tunnelbanans blåa linje", class: "is-danger"},
-                { title: "Vettvilling springer runt med saxar", lines: "Buss 504", class: "is-warning"},
-                { title: "Vattenplaning", lines: "Buss 504"},
-                { title: "50 hökar attackerar småbarn", lines: "Buss 504"}
-            ]
-        });
+        await this.getDepartures();
+        await this.getDeviations();
     }
 
     async getDepartures() {
         fetch("/departures")
-            .then()
-        let response = await fetch("/departures");
-        let result = await response.json();
-        let buses = [];
-        for (let bus of result.ResponseData.Buses) {
-            buses.push({mode: "bus", line: bus.LineNumber, endStation: bus.Destination, departure: bus.DisplayTime});
-        }
-        return buses.splice(0, 5);
+            .then(response => response.json())
+            .then(data => {
+                let buses = [];
+                for (let bus of data.ResponseData.Buses) {
+                    buses.push({mode: "bus", line: bus.LineNumber, endStation: bus.Destination, departure: bus.DisplayTime})
+                }
+                this.setState({
+                    nextDeparture: {
+                        timeToDeparture: buses[0].departure,
+                        departureInfo: buses[0].line + " mot " + buses[0].endStation,
+                        mode: "bus"
+                    },
+                    comingDepartures: buses.splice(1, 4),
+                    deviations: this.state.deviations
+                });
+            });
     }
 
-    getDeviations() {
+    async getDeviations() {
 
     }
 }

@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -10,11 +12,10 @@ app.get('/ping', function (req, res) {
 });
 
 app.get('/departures', function (req, res) {
-    console.log("Fetching departures")
     request({
         uri: 'http://api.sl.se/api2/realtimedeparturesV4.JSON',
         qs: {
-            key: '',
+            key: process.env.SL_REAL_TIME_INFO_API_KEY,
             siteid: '3522',
             timewindow: '60'
         },
@@ -33,7 +34,6 @@ app.get('/weather-airport', function (req, res) {
 
 });
 
-const listener = app.listen(process.env.PORT || 8080, function () {
+const listener = app.listen(process.env.API_PORT, function () {
     console.log("Backend API is listening on port " + listener.address().port);
 });
-
