@@ -5,7 +5,7 @@ class NextDeparture extends React.Component {
         return (
             <div className="has-text-centered">
                 <p className="is-size-1">{this.props.timeToDeparture}</p>
-                <p className="is-size-3">{this.props.departureInfo}</p>
+                <p className="is-size-3"><i class={"fas fa-" + this.props.mode}></i> {this.props.departureInfo}</p>
             </div>
         );
     }
@@ -29,7 +29,7 @@ class ComingDepartureItem extends React.Component {
     render() {
         return (
             <tr>
-                <td>{this.props.mode}</td>
+                <td><i class={"fas fa-" + this.props.mode}></i></td>
                 <td>{this.props.line}</td>
                 <td>{this.props.endStation}</td>
                 <td>{this.props.departure}</td>

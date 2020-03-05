@@ -6,23 +6,27 @@ class YR extends React.Component {
             <section class="section">
                 <div className="columns">
                     <div className="column">
-                        <WeatherReport placeName="Ursvik"
-                            currentReport={{temperature: "8", weather: "Regn"}}
+                        <WeatherReport 
+                            placeName={"Ursvik"}
+                            placeSymbol="home"
+                            currentReport={{temperature: "8", weather: "cloud-showers-heavy", wind: "1"}}
                             reports={[
-                                {time: "00:00", weather: "Regn", temperatureHigh: "7", temperatureLow: "1", precipitation: "8"},
-                                {time: "06:00", weather: "Brutna moln", temperatureHigh: "9", temperatureLow: "5", precipitation: "1"},
-                                {time: "12:00", weather: "Klart", temperatureHigh: "14", temperatureLow: "12", precipitation: "0"},
-                                {time: "18:00", weather: "Klart", temperatureHigh: "11", temperatureLow: "8", precipitation: "0"}
+                                {time: "00:00", weather: 'cloud-showers-heavy', temperatureHigh: "7", temperatureLow: "1", precipitation: "8", wind: "0"},
+                                {time: "06:00", weather: "cloud-sun", temperatureHigh: "9", temperatureLow: "5", precipitation: "1", wind: "2"},
+                                {time: "12:00", weather: "sun", temperatureHigh: "14", temperatureLow: "12", precipitation: "0", wind: "1"},
+                                {time: "18:00", weather: "sun", temperatureHigh: "11", temperatureLow: "8", precipitation: "0", wind: "1"}
                             ]}/>
                     </div>
                     <div className="column">
-                        <WeatherReport placeName="Vängsö"
-                            currentReport={{temperature: "7", weather: "Regn"}}
+                        <WeatherReport 
+                            placeName="Vängsö"
+                            placeSymbol="plane"
+                            currentReport={{temperature: "7", weather: "cloud", wind: "3"}}
                             reports={[
-                                {time: "00:00", weather: "Regn", temperatureHigh: "5", temperatureLow: "-1", precipitation: "10"},
-                                {time: "06:00", weather: "Brutna moln", temperatureHigh: "6", temperatureLow: "4", precipitation: "2"},
-                                {time: "12:00", weather: "Klart", temperatureHigh: "13", temperatureLow: "11", precipitation: "0"},
-                                {time: "18:00", weather: "Klart", temperatureHigh: "10", temperatureLow: "7", precipitation: "0"}
+                                {time: "00:00", weather: "cloud-showers-heavy", temperatureHigh: "5", temperatureLow: "-1", precipitation: "10", wind: "6"},
+                                {time: "06:00", weather: "cloud", temperatureHigh: "6", temperatureLow: "4", precipitation: "2", wind: "4"},
+                                {time: "12:00", weather: "sun", temperatureHigh: "13", temperatureLow: "11", precipitation: "0", wind: "2"},
+                                {time: "18:00", weather: "sun", temperatureHigh: "10", temperatureLow: "7", precipitation: "0", wind: "4"}
                             ]}/>
                     </div>
                 </div>
@@ -35,13 +39,16 @@ class WeatherReport extends React.Component {
     render() {
         return (
             <div>
-                <p className="title has-text-centered">{this.props.placeName}</p>
+                <p className="title has-text-centered"><i class={"fas fa-" + this.props.placeSymbol}></i> {this.props.placeName}</p>
                 <div className="columns has-text-centered">
                     <div className="column">
-                        <p className="is-size-2">{this.props.currentReport.weather}</p>
+                        <p className="is-size-1"><i class={"fas fa-" + this.props.currentReport.weather}></i></p>
                     </div>
                     <div className="column">
                         <p className="is-size-2">{this.props.currentReport.temperature + "°"}</p>
+                    </div>
+                    <div className="column">
+                        <p className="is-size-2">{this.props.currentReport.wind + " m/s"}</p>
                     </div>
                 </div>
                 <table className="table is-fullwidth">
@@ -51,7 +58,8 @@ class WeatherReport extends React.Component {
                             weather={r.weather} 
                             temperatureHigh={r.temperatureHigh} 
                             temperatureLow={r.temperatureLow} 
-                            precipitation={r.precipitation}/>)}
+                            precipitation={r.precipitation}
+                            wind={r.wind}/>)}
                     </tbody>
                 </table>
             </div>
@@ -64,10 +72,11 @@ class WeatherReportItem extends React.Component {
         return (
             <tr>
                 <td className="has-text-weight-bold">{this.props.time}</td>
-                <td>{this.props.weather}</td>
+                <td><i class={"fas fa-" + this.props.weather}></i></td>
                 <td className="has-text-weight-bold has-text-danger">{this.props.temperatureHigh + "°"}</td>
                 <td className="has-text-weight-bold has-text-info">{this.props.temperatureLow + "°"}</td>
                 <td>{this.props.precipitation + "mm"}</td>
+                <td>{this.props.wind + " m/s"}</td>
             </tr>
         );
     }

@@ -17,9 +17,9 @@ class CurrentDate extends React.Component {
 
     render() {
         return (
-        <span className="date">
-            {Date.dayName(this.state.time.getDay(), true)} den {this.state.time.getDate()}{Date.dateSuffix(this.state.time.getDate())} {Date.monthName(this.state.time.getMonth())} {this.state.time.getFullYear()}
-        </span>
+            <span className="date">
+                <i className="fas fa-calendar-day"></i> {Date.dayName(this.state.time.getDay(), true) + " den " + this.state.time.getDate() + Date.dateSuffix(this.state.time.getDate()) + " " + Date.monthName(this.state.time.getMonth()) + " " + this.state.time.getFullYear()}
+            </span>
         );
     }
 }

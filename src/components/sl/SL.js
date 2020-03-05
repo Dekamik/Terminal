@@ -8,13 +8,14 @@ class SL extends React.Component {
         this.state = {
             nextDeparture: {
                 timeToDeparture: "Nu",
-                departureInfo: "Buss 504 mot Rissne"
+                departureInfo: "504 mot Rissne",
+                mode: "bus"
             },
             comingDepartures: [
-                { mode: "Buss", line: "504", endStation: "Sundbybergs station", departure: "4 min" },
-                { mode: "Buss", line: "504", endStation: "Rissne", departure: "15 min" },
-                { mode: "Buss", line: "504", endStation: "Sundbybergs station", departure: "19 min" },
-                { mode: "Buss", line: "504", endStation: "Rissne", departure: "10:52" },
+                { mode: "bus", line: "504", endStation: "Sundbybergs station", departure: "4 min" },
+                { mode: "bus", line: "504", endStation: "Rissne", departure: "15 min" },
+                { mode: "bus", line: "504", endStation: "Sundbybergs station", departure: "19 min" },
+                { mode: "bus", line: "504", endStation: "Rissne", departure: "10:52" },
             ],
             deviations: [
                 { title: "Coronavirusutbrott", lines: "Tunnelbanans blåa linje", class: "is-danger"},
@@ -30,7 +31,7 @@ class SL extends React.Component {
             <section className="section">
                 <div className="columns">
                     <div className="column">
-                        <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo}/>
+                        <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo} mode={this.state.nextDeparture.mode}/>
                     </div>
                     <div className="column">
                         <ComingDepartures departures={this.state.comingDepartures}/>

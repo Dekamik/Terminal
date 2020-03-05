@@ -17,9 +17,9 @@ class CurrentTime extends React.Component {
 
     render() {
         return (
-        <span className="time">
-            {this.state.time.toLocaleTimeString("sv-se", {hour: "2-digit", minute: "2-digit"})}
-        </span>
+            <span className="time">
+                <i className="fas fa-clock"></i> {this.state.time.toLocaleTimeString("sv-se", {hour: "2-digit", minute: "2-digit"})}
+            </span>
         );
     }
 }
