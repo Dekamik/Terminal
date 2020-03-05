@@ -32,7 +32,7 @@ class SL extends React.Component {
                     <div className="column">
                         <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo} mode={this.state.nextDeparture.mode}/>
                     </div>
-                    <div className="column">
+                    <div className="column is-size-4">
                         <ComingDepartures departures={this.state.comingDepartures}/>
                     </div>
                 </div>
@@ -56,15 +56,18 @@ class SL extends React.Component {
                 for (let bus of data.ResponseData.Buses) {
                     buses.push({mode: "bus", line: bus.LineNumber, endStation: bus.Destination, departure: bus.DisplayTime})
                 }
-                this.setState({
-                    nextDeparture: {
-                        timeToDeparture: buses[0].departure,
-                        departureInfo: buses[0].line + " mot " + buses[0].endStation,
-                        mode: "bus"
-                    },
-                    comingDepartures: buses.splice(1, 4),
-                    deviations: this.state.deviations
-                });
+                if (buses.length !== 0)
+                {
+                    this.setState({
+                        nextDeparture: {
+                            mode: "bus",
+                            timeToDeparture: buses[0].departure,
+                            departureInfo: buses[0].line + " mot " + buses[0].endStation
+                        },
+                        comingDepartures: buses.splice(1, 4),
+                        deviations: this.state.deviations
+                    });
+                }
             });
     }
 

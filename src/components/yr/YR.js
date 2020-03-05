@@ -39,10 +39,10 @@ class WeatherReport extends React.Component {
     render() {
         return (
             <div>
-                <p className="title has-text-centered"><i class={"fas fa-" + this.props.placeSymbol}></i> {this.props.placeName}</p>
+                <p className="title has-text-centered"><i className={"fas fa-" + this.props.placeSymbol}></i> {this.props.placeName}</p>
                 <div className="columns has-text-centered">
                     <div className="column">
-                        <p className="is-size-1"><i class={"fas fa-" + this.props.currentReport.weather}></i></p>
+                        <p className="is-size-1"><i className={"fas fa-" + this.props.currentReport.weather}></i></p>
                     </div>
                     <div className="column">
                         <p className="is-size-2">{this.props.currentReport.temperature + "°"}</p>
@@ -70,9 +70,9 @@ class WeatherReport extends React.Component {
 class WeatherReportItem extends React.Component {
     render() {
         return (
-            <tr>
+            <tr className="is-size-4">
                 <td className="has-text-weight-bold">{this.props.time}</td>
-                <td><i class={"fas fa-" + this.props.weather}></i></td>
+                <td><i className={"fas fa-" + this.props.weather}></i></td>
                 <td className="has-text-weight-bold has-text-danger">{this.props.temperatureHigh + "°"}</td>
                 <td className="has-text-weight-bold has-text-info">{this.props.temperatureLow + "°"}</td>
                 <td>{this.props.precipitation + "mm"}</td>
