@@ -22,13 +22,15 @@ class DeviationCard extends React.Component {
 
     render() {
         return (
-            <div className={"tile is-child notification is-4 " + this.props.class}>
-                <p className="title">
-                    {this.state.title}
-                </p>
-                <p className="subtitle">
-                    {this.state.lines}
-                </p>
+            <div className="tile is-parent is-4">
+                <div className={"tile is-child notification " + this.props.class}>
+                    <p className="title">
+                        {this.state.title}
+                    </p>
+                    <p className="subtitle">
+                        {this.state.lines}
+                    </p>
+                </div>
             </div>
         );
     }

@@ -27,7 +27,7 @@ class SL extends React.Component {
 
     render() {
         return (
-            <div>
+            <section className="section">
                 <div className="columns">
                     <div className="column">
                         <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo}/>
@@ -39,7 +39,7 @@ class SL extends React.Component {
                 <div>
                     <Deviations deviations={this.state.deviations}/>
                 </div>
-            </div>
+            </section>
         );
     }
 }

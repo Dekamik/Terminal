@@ -15,7 +15,7 @@ class ComingDepartures extends React.Component {
     render() {
         return (
             <div>
-                <table class="table">
+                <table class="table is-fullwidth">
                     <tbody>
                         {this.props.departures.map(d => <ComingDepartureItem mode={d.mode} line={d.line} endStation={d.endStation} departure={d.departure}/>)}
                     </tbody>
