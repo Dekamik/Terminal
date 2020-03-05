@@ -8,12 +8,12 @@ class Navbar extends React.Component {
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-menu">
                     <div className="navbar-start">
-                        <div className="navbar-item is-size-3">
+                        <div className="navbar-item is-size-1">
                             <CurrentDate/>
                         </div>
                     </div>
                     <div className="navbar-end">
-                        <div className="navbar-item is-size-3">
+                        <div className="navbar-item is-size-1">
                             <CurrentTime/>
                         </div>
                     </div>
