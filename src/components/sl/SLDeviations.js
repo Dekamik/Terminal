@@ -3,9 +3,8 @@ import React from "react";
 class Deviations extends React.Component {
     render() {
         return (
-            <div>
-                <DeviationCard title="Coronavirusutbrott" lines="Tunnelbanans blåa linje"/>
-                <DeviationCard title="Vettvilling springer runt med saxar" lines="Buss 504"/>
+            <div className="tile is-ancestor" style={{'flex-wrap': 'wrap'}}>
+                {this.props.deviations.map(d => <DeviationCard title={d.title} lines={d.lines} class={d.class}/>)}
             </div>
         );
     }
@@ -16,21 +15,20 @@ class DeviationCard extends React.Component {
         super(props);
         this.state = {
             title: props.title,
-            lines: props.lines
+            lines: props.lines,
+            colorClass: props.colorClass
         };
     }
 
     render() {
         return (
-            <div className="card">
-                <div class="card-content">
-                    <p class="title">
-                        {this.state.title}
-                    </p>
-                    <p class="subtitle">
-                        {this.state.lines}
-                    </p>
-                </div>
+            <div className={"tile is-child notification is-4 " + this.props.class}>
+                <p className="title">
+                    {this.state.title}
+                </p>
+                <p className="subtitle">
+                    {this.state.lines}
+                </p>
             </div>
         );
     }

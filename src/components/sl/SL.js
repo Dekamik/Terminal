@@ -16,14 +16,18 @@ class SL extends React.Component {
                 { mode: "Buss", line: "504", endStation: "Sundbybergs station", departure: "19 min" },
                 { mode: "Buss", line: "504", endStation: "Rissne", departure: "10:52" },
             ],
-            deviations: [1]
+            deviations: [
+                { title: "Coronavirusutbrott", lines: "Tunnelbanans blåa linje", class: "is-danger"},
+                { title: "Vettvilling springer runt med saxar", lines: "Buss 504", class: "is-warning"},
+                { title: "Vattenplaning", lines: "Buss 504"},
+                { title: "50 hökar attackerar småbarn", lines: "Buss 504"}
+            ]
         };
     }
 
     render() {
-        if (this.state.deviations.length === 0)
-        {
-            return (
+        return (
+            <div>
                 <div className="columns">
                     <div className="column">
                         <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo}/>
@@ -32,26 +36,11 @@ class SL extends React.Component {
                         <ComingDepartures departures={this.state.comingDepartures}/>
                     </div>
                 </div>
-            );
-        }
-        else {
-            return (
                 <div>
-                    <div className="columns">
-                        <div className="column">
-                            <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo}/>
-                        </div>
-                        <div className="column">
-                            <ComingDepartures departures={this.state.comingDepartures}/>
-                        </div>
-                    </div>
-                    <div>
-                        <Deviations deviations={this.state.deviations}/>
-                    </div>
+                    <Deviations deviations={this.state.deviations}/>
                 </div>
-            );
-        }
-        
+            </div>
+        );
     }
 }
 
