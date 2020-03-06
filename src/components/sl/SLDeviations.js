@@ -24,10 +24,10 @@ class DeviationCard extends React.Component {
         return (
             <div className="tile is-parent is-4">
                 <div className={"tile is-child notification " + this.props.class}>
-                    <p className="title">
+                    <p className="title is-size-4">
                         {this.state.title}
                     </p>
-                    <p className="subtitle">
+                    <p className="subtitle is-size-5">
                         {this.state.lines}
                     </p>
                 </div>

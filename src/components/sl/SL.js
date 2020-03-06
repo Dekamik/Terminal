@@ -17,12 +17,15 @@ class SL extends React.Component {
     }
 
     async componentDidMount() {
-        this.refreshState();
-        this.interval = setInterval(() => { this.refreshState() }, 10000);
+        this.getDepartures();
+        this.getDeviations();
+        this.departuresInterval = setInterval(() => { this.getDepartures() }, 10000);
+        this.deviationsInterval = setInterval(() => { this.getDeviations() }, 300000);
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        clearInterval(this.departuresInterval);
+        clearInterval(this.deviationsInterval);
     }
 
     render() {
@@ -43,36 +46,49 @@ class SL extends React.Component {
         );
     }
 
-    async refreshState() {
-        await this.getDepartures();
-        await this.getDeviations();
-    }
-
     async getDepartures() {
         fetch("/departures")
             .then(response => response.json())
             .then(data => {
-                let buses = [];
-                for (let bus of data.ResponseData.Buses) {
-                    buses.push({mode: "bus", line: bus.LineNumber, endStation: bus.Destination, departure: bus.DisplayTime})
-                }
-                if (buses.length !== 0)
+                if (data.ResponseData !== undefined)
                 {
-                    this.setState({
-                        nextDeparture: {
-                            mode: "bus",
-                            timeToDeparture: buses[0].departure,
-                            departureInfo: buses[0].line + " mot " + buses[0].endStation
-                        },
-                        comingDepartures: buses.splice(1, 4),
-                        deviations: this.state.deviations
-                    });
+                    let buses = [];
+                    for (let bus of data.ResponseData.Buses) {
+                        buses.push({mode: "bus", line: bus.LineNumber, endStation: bus.Destination, departure: bus.DisplayTime})
+                    }
+                    if (buses.length !== 0)
+                    {
+                        this.setState({
+                            nextDeparture: {
+                                mode: "bus",
+                                timeToDeparture: buses[0].departure,
+                                departureInfo: buses[0].line + " mot " + buses[0].endStation
+                            },
+                            comingDepartures: buses.splice(1, 4),
+                            deviations: this.state.deviations
+                        });
+                    }
                 }
             });
     }
 
     async getDeviations() {
-
+        fetch("/deviations")
+            .then(response => response.json())
+            .then(data => {
+                let deviations = [];
+                for (let deviation of data.ResponseData) {
+                    deviations.push({title: deviation.Header, lines: deviation.Scope, class: deviation.MainNews ? "is-warning" : ""})
+                }
+                if (deviations.length !== 0)
+                {
+                    this.setState({
+                        nextDeparture: this.state.nextDeparture,
+                        comingDepartures: this.state.comingDepartures,
+                        deviations: deviations
+                    });
+                }
+            });
     }
 }
 
