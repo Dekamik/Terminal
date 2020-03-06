@@ -3,7 +3,7 @@ import React from 'react';
 class YR extends React.Component {
     render() {
         return (
-            <section class="section">
+            <section className="section">
                 <div className="columns">
                     <div className="column">
                         <WeatherReport 
@@ -53,7 +53,8 @@ class WeatherReport extends React.Component {
                 </div>
                 <table className="table is-fullwidth">
                     <tbody>
-                        {this.props.reports.map(r => <WeatherReportItem 
+                        {this.props.reports.map((r, key) => <WeatherReportItem 
+                            key={key}
                             time={r.time} 
                             weather={r.weather} 
                             temperatureHigh={r.temperatureHigh} 

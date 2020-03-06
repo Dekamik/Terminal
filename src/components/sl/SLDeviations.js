@@ -3,7 +3,7 @@ import React from "react";
 class Deviations extends React.Component {
     render() {
         return (
-            <div className="tile is-ancestor" style={{'flex-wrap': 'wrap'}}>
+            <div className="tile is-ancestor" style={{'flexWrap': 'wrap'}}>
                 {this.props.deviations.map(d => <DeviationCard title={d.title} lines={d.lines} class={d.class}/>)}
             </div>
         );

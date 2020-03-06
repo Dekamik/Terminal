@@ -5,8 +5,8 @@ import CurrentTime from "./../clock/Time";
 class Navbar extends React.Component {
     render() {
         return (
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="navbar-menu">
+            <nav className="navbar" role="navigation" aria-label="main navigation">
+                <div className="navbar-menu">
                     <div className="navbar-start">
                         <div className="navbar-item is-size-1">
                             <CurrentDate/>
