@@ -2,6 +2,18 @@ import React from 'react';
 
 class Weather extends React.Component {
 
+    URSVIK = {
+        lat: 59.3832,
+        lon: 17.9577,
+        msl: 36
+    };
+
+    VANGSO = {
+        lat: 59.1000,
+        lon: 17.2167,
+        msl: 16
+    };
+
     constructor(props) {
         super(props);
         this.setState({
@@ -10,10 +22,10 @@ class Weather extends React.Component {
     }
 
     componentDidMount() {
-        this.getWeather('Rissne, Stockholms län');
-        this.getWeather('Gnesta, Södermanlands län');
-        this.homeWeatherInterval = setInterval(() => { this.getWeather('Rissne, Stockholms län') }, 60000);
-        this.airfieldWeatherInterval = setInterval(() => { this.getWeather('Gnesta, Södermanlands län') }, 60000);
+        this.getWeather(this.URSVIK);
+        this.getWeather(this.VANGSO);
+        this.homeWeatherInterval = setInterval(() => { this.getWeather(this.URSVIK) }, 300000);
+        this.airfieldWeatherInterval = setInterval(() => { this.getWeather(this.VANGSO) }, 300000);
     }
 
     componentWillUnmount() {
@@ -55,7 +67,7 @@ class Weather extends React.Component {
     }
 
     async getWeather(place) {
-        fetch(`/weather?place=${place}`)
+        fetch(`/weather?lat=${place.lat}&lon=${place.lon}&msl=${place.msl}`)
             .then(response => response.text())
             .then(data => {
                 console.log(data);

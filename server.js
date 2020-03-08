@@ -3,7 +3,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
-const weather = require('weather-js');
+const yrno = require('yr.no-forecast')({
+    request: {
+        timeout: 15000
+    }
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -35,10 +39,15 @@ app.get('/deviations', function (req, res) {
 });
 
 app.get('/weather', function (req, res) {
-    weather.find({search: req.query.place, degreeType: 'C'}, (err, result) => {
-        if (err) console.error(err);
-        res.send(result);
-    });
+    let response = {};
+    let weather = undefined;
+    yrno.getWeather(req.query)
+        .then(data => { weather = data })
+        .then(() => weather.getForecastForTime(new Date()))
+        .then(current => response.current = current)
+        .then(() => weather.getFiveDaySummary())
+        .then(forecast => response.forecast = forecast)
+        .then(() => res.send(response));
 });
 
 const listener = app.listen(process.env.API_PORT, function () {
