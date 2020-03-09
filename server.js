@@ -16,12 +16,22 @@ app.get('/ping', function (req, res) {
     return res.send('pong');
 });
 
+app.get('/busstop', function (req, res) {
+    request({
+        uri: 'https://api.sl.se/api2/typeahead.json',
+        qs: {
+            key: process.env.SL_PLACES_API_KEY,
+            searchstring: process.env.SL_PLACES_BUS_STOP_NAME
+        }
+    }).pipe(res);
+});
+
 app.get('/departures', function (req, res) {
     request({
         uri: 'http://api.sl.se/api2/realtimedeparturesV4.JSON',
         qs: {
             key: process.env.SL_REAL_TIME_API_KEY,
-            siteid: process.env.SL_REAL_TIME_SITE_ID,
+            siteid: req.query.siteId,
             timewindow: process.env.SL_REAL_TIME_TIME_WINDOW_MINS
         },
     }).pipe(res);
