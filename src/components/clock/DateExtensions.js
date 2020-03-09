@@ -30,6 +30,20 @@ Date.dayName = function (weekDayNum, singular = false) {
     return weekDayNames[weekDayNum] + (singular ? "en" : "");
 }
 
+Date.dayShortName = function (weekDayNum) {
+    let weekDayNames = {
+        0: "Sön",
+        1: "Mån",
+        2: "Tis",
+        3: "Ons",
+        4: "Tors",
+        5: "Fre",
+        6: "Lör",
+        7: "Sön"
+    };
+    return weekDayNames[weekDayNum];
+}
+
 Date.dateSuffix = function (day) {
     let lastNumber = day.toString().slice(-1);
     if (lastNumber === "1" || lastNumber === "2") {

@@ -4,7 +4,7 @@ class Deviations extends React.Component {
     render() {
         return (
             <div className="tile is-ancestor" style={{'flexWrap': 'wrap'}}>
-                {this.props.deviations.map(d => <DeviationCard title={d.title} lines={d.lines} class={d.class}/>)}
+                {this.props.deviations.map((d, key) => <DeviationCard key={key} title={d.title} lines={d.lines} class={d.class}/>)}
             </div>
         );
     }

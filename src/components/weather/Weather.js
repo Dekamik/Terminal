@@ -1,4 +1,5 @@
 import React from 'react';
+import './../clock/DateExtensions';
 
 class Weather extends React.Component {
 
@@ -16,24 +17,34 @@ class Weather extends React.Component {
 
     constructor(props) {
         super(props);
-        this.setState({
-
-        })
+        this.state = {
+            Ursvik: null,
+            Vängsö: null
+        };
     }
 
     componentDidMount() {
-        this.getWeather(this.URSVIK);
-        this.getWeather(this.VANGSO);
-        this.homeWeatherInterval = setInterval(() => { this.getWeather(this.URSVIK) }, 300000);
-        this.airfieldWeatherInterval = setInterval(() => { this.getWeather(this.VANGSO) }, 300000);
+        this.updateWeather();
+        this.interval = setInterval(() => { this.updateWeather() }, 150000);
     }
 
     componentWillUnmount() {
-        clearInterval(this.homeWeatherInterval);
-        clearInterval(this.airfieldWeatherInterval);
+        clearInterval(this.interval);
     }
 
     render() {
+        if (this.state.Ursvik == null || this.state.Vängsö == null) {
+            return (
+                <section className="section">
+                    <div className="title has-text-centered">
+                        <p>Laddar väderdata...</p>
+                        <progress className="progress" max="100"></progress>
+                    </div>
+                </section>
+            );
+        }
+        let ursvik = this.state.Ursvik;
+        let vängsö = this.state.Vängsö;
         return (
             <section className="section">
                 <div className="columns">
@@ -41,41 +52,80 @@ class Weather extends React.Component {
                         <WeatherReport 
                             placeName={"Ursvik"}
                             placeSymbol="home"
-                            currentReport={{temperature: "8", weather: "cloud-showers-heavy", wind: "1"}}
-                            reports={[
-                                {time: "00:00", weather: 'cloud-showers-heavy', temperatureHigh: "7", temperatureLow: "1", precipitation: "8", wind: "0"},
-                                {time: "06:00", weather: "cloud-sun", temperatureHigh: "9", temperatureLow: "5", precipitation: "1", wind: "2"},
-                                {time: "12:00", weather: "sun", temperatureHigh: "14", temperatureLow: "12", precipitation: "0", wind: "1"},
-                                {time: "18:00", weather: "sun", temperatureHigh: "11", temperatureLow: "8", precipitation: "0", wind: "1"}
-                            ]}/>
+                            currentReport={{temperature: ursvik.current?.temperature.value ?? "?", weather: Weather.getSymbol(ursvik.current.icon), wind: ursvik.current?.windSpeed.mps ?? "?"}}
+                            reports={ursvik.forecast.map(f => ({
+                                time: Weather.getLocalizedTime(f.from), 
+                                weather: Weather.getSymbol(f.icon), 
+                                temperatureHigh: f.maxTemperature?.value ?? f.temperature?.value ?? "?",
+                                temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
+                                precipitation: f.rainDetails?.rain ?? "0",
+                                wind: f.windSpeed?.mps ?? "0" }))}/>
                     </div>
                     <div className="column">
                         <WeatherReport 
                             placeName="Vängsö"
                             placeSymbol="plane"
-                            currentReport={{temperature: "7", weather: "cloud", wind: "3"}}
-                            reports={[
-                                {time: "00:00", weather: "cloud-showers-heavy", temperatureHigh: "5", temperatureLow: "-1", precipitation: "10", wind: "6"},
-                                {time: "06:00", weather: "cloud", temperatureHigh: "6", temperatureLow: "4", precipitation: "2", wind: "4"},
-                                {time: "12:00", weather: "sun", temperatureHigh: "13", temperatureLow: "11", precipitation: "0", wind: "2"},
-                                {time: "18:00", weather: "sun", temperatureHigh: "10", temperatureLow: "7", precipitation: "0", wind: "4"}
-                            ]}/>
+                            currentReport={{temperature: vängsö.current?.temperature.value ?? "?", weather: Weather.getSymbol(vängsö.current.icon), wind: vängsö.current?.windSpeed.mps ?? "?"}}
+                            reports={vängsö.forecast.map(f => ({
+                                time: Weather.getLocalizedTime(f.from), 
+                                weather: Weather.getSymbol(f.icon), 
+                                temperatureHigh: f.maxTemperature?.value ?? f.temperature?.value ?? "?",
+                                temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
+                                precipitation: f.rainDetails.rain,
+                                wind: f.windSpeed.mps }))}/>
                     </div>
                 </div>
             </section>
         );
     }
 
-    async getWeather(place) {
-        fetch(`/weather?lat=${place.lat}&lon=${place.lon}&msl=${place.msl}`)
-            .then(response => response.text())
+    async updateWeather() {
+        await fetch(`/weather?lat=${this.URSVIK.lat}&lon=${this.URSVIK.lon}&msl=${this.URSVIK.msl}`)
+            .then(response => response.json())
             .then(data => {
-                console.log(data);
+                this.setState({
+                    Ursvik: data,
+                    Vängsö: this.state.Vängsö
+                });
+            });
+        await fetch(`/weather?lat=${this.VANGSO.lat}&lon=${this.VANGSO.lon}&msl=${this.VANGSO.msl}`)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({
+                    Ursvik: this.state.Ursvik,
+                    Vängsö: data
+                });
             });
     }
 
-    static getSymbol(weatherStr) {
+    static getSymbol(forecast) {
+        switch (forecast) {
+            case 'Sun':
+                return 'sun';
 
+            case "PartlyCloud":
+            case "LightCloud":
+                return "cloud-sun";
+
+            case "Cloud":
+                return "cloud";
+
+            case "Snow":
+                return "snowflake";
+            
+            case "LightRain":
+            case "Rain":
+                return "cloud-showers-heavy";
+            
+            default:
+                console.log("Missing icon for ", forecast);
+                break;
+        }
+    }
+
+    static getLocalizedTime(timeStr) {
+        let date = new Date(timeStr);
+        return `${Date.dayShortName(date.getDay())} ${date.getDate()}/${date.getMonth() + 1}`;
     }
 }
 
@@ -115,7 +165,7 @@ class WeatherReport extends React.Component {
 class WeatherReportItem extends React.Component {
     render() {
         return (
-            <tr className="is-size-4">
+            <tr className="is-size-5">
                 <td className="has-text-weight-bold">{this.props.time}</td>
                 <td><i className={"fas fa-" + this.props.weather}></i></td>
                 <td className="has-text-weight-bold has-text-danger">{this.props.temperatureHigh + "°"}</td>
