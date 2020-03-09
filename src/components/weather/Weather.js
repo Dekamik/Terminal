@@ -3,18 +3,6 @@ import './../clock/DateExtensions';
 
 class Weather extends React.Component {
 
-    URSVIK = {
-        lat: 59.3832,
-        lon: 17.9577,
-        msl: 36
-    };
-
-    VANGSO = {
-        lat: 59.1000,
-        lon: 17.2167,
-        msl: 16
-    };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +13,7 @@ class Weather extends React.Component {
 
     componentDidMount() {
         this.updateWeather();
-        this.interval = setInterval(() => { this.updateWeather() }, 150000);
+        this.interval = setInterval(() => { this.updateWeather() }, process.env.REACT_APP_YR_REFRESH_MILLIS);
     }
 
     componentWillUnmount() {
@@ -50,22 +38,22 @@ class Weather extends React.Component {
                 <div className="columns">
                     <div className="column">
                         <WeatherReport 
-                            placeName={"Ursvik"}
-                            placeSymbol="home"
-                            currentReport={{temperature: ursvik.current?.temperature.value ?? "?", weather: Weather.getSymbol(ursvik.current.icon), wind: ursvik.current?.windSpeed.mps ?? "?"}}
+                            placeName={process.env.REACT_APP_YR_LOC1_NAME}
+                            placeSymbol={process.env.REACT_APP_YR_LOC1_SYM}
+                            currentReport={{temperature: ursvik.current?.temperature.value ?? ursvik.forecast[0]?.temperature?.value ?? "?", weather: Weather.getSymbol(ursvik.current?.icon ?? ursvik.forecast[0]?.icon), wind: ursvik.current?.windSpeed.mps ?? ursvik.forecast[0].windSpeed.mps ?? "?"}}
                             reports={ursvik.forecast.map(f => ({
                                 time: Weather.getLocalizedTime(f.from), 
                                 weather: Weather.getSymbol(f.icon), 
                                 temperatureHigh: f.maxTemperature?.value ?? f.temperature?.value ?? "?",
                                 temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
-                                precipitation: f.rainDetails?.rain ?? "0",
-                                wind: f.windSpeed?.mps ?? "0" }))}/>
+                                precipitation: f.rainDetails?.rain ?? "?",
+                                wind: f.windSpeed?.mps ?? "?" }))}/>
                     </div>
                     <div className="column">
                         <WeatherReport 
-                            placeName="Vängsö"
-                            placeSymbol="plane"
-                            currentReport={{temperature: vängsö.current?.temperature.value ?? "?", weather: Weather.getSymbol(vängsö.current.icon), wind: vängsö.current?.windSpeed.mps ?? "?"}}
+                            placeName={process.env.REACT_APP_YR_LOC2_NAME}
+                            placeSymbol={process.env.REACT_APP_YR_LOC2_SYM}
+                            currentReport={{temperature: vängsö.current?.temperature.value ?? vängsö.forecast[0]?.temperature?.value ?? "?", weather: Weather.getSymbol(vängsö.current?.icon ?? vängsö.forecast[0]?.icon), wind: vängsö.current?.windSpeed.mps ?? vängsö.forecast[0].windSpeed.mps ?? "?"}}
                             reports={vängsö.forecast.map(f => ({
                                 time: Weather.getLocalizedTime(f.from), 
                                 weather: Weather.getSymbol(f.icon), 
@@ -80,7 +68,7 @@ class Weather extends React.Component {
     }
 
     async updateWeather() {
-        await fetch(`/weather?lat=${this.URSVIK.lat}&lon=${this.URSVIK.lon}&msl=${this.URSVIK.msl}`)
+        await fetch(`/weather?lat=${process.env.REACT_APP_YR_LOC1_LAT}&lon=${process.env.REACT_APP_YR_LOC1_LON}&msl=${process.env.REACT_APP_YR_LOC1_MSL}`)
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -88,7 +76,7 @@ class Weather extends React.Component {
                     Vängsö: this.state.Vängsö
                 });
             });
-        await fetch(`/weather?lat=${this.VANGSO.lat}&lon=${this.VANGSO.lon}&msl=${this.VANGSO.msl}`)
+        await fetch(`/weather?lat=${process.env.REACT_APP_YR_LOC2_LAT}&lon=${process.env.REACT_APP_YR_LOC2_LON}&msl=${process.env.REACT_APP_YR_LOC2_MSL}`)
             .then(response => response.json())
             .then(data => {
                 this.setState({

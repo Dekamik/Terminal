@@ -19,8 +19,8 @@ class SL extends React.Component {
     async componentDidMount() {
         this.getDepartures();
         this.getDeviations();
-        this.departuresInterval = setInterval(() => { this.getDepartures() }, 10000);
-        this.deviationsInterval = setInterval(() => { this.getDeviations() }, 300000);
+        this.departuresInterval = setInterval(() => { this.getDepartures() }, process.env.REACT_APP_SL_REAL_TIME_REFRESH_MILLIS);
+        this.deviationsInterval = setInterval(() => { this.getDeviations() }, process.env.REACT_APP_SL_DEVIATIONS_REFRESH_MILLIS);
     }
 
     componentWillUnmount() {
@@ -31,7 +31,7 @@ class SL extends React.Component {
     render() {
         return (
             <section className="section">
-                <div className="columns">
+                <div className="columns is-vcentered">
                     <div className="column">
                         <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo} mode={this.state.nextDeparture.mode}/>
                     </div>
