@@ -36,7 +36,7 @@ class Weather extends React.Component {
         return (
             <section className="section">
                 <div className="columns">
-                    <div className="column">
+                    <div className="column is-5">
                         <WeatherReport 
                             placeName={process.env.REACT_APP_YR_LOC1_NAME}
                             placeSymbol={process.env.REACT_APP_YR_LOC1_SYM}
@@ -46,8 +46,7 @@ class Weather extends React.Component {
                                 weather: Weather.getSymbol(f.icon), 
                                 temperatureHigh: f.maxTemperature?.value ?? f.temperature?.value ?? "?",
                                 temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
-                                precipitation: f.rainDetails?.rain ?? "?",
-                                wind: f.windSpeed?.mps ?? "?" }))}/>
+                                precipitation: f.rainDetails?.rain ?? "?"}))}/>
                     </div>
                     <div className="column">
                         <WeatherReport 
@@ -60,7 +59,9 @@ class Weather extends React.Component {
                                 temperatureHigh: f.maxTemperature?.value ?? f.temperature?.value ?? "?",
                                 temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
                                 precipitation: f.rainDetails.rain,
-                                wind: f.windSpeed.mps }))}/>
+                                wind: f.windSpeed.mps,
+                                pressure: f.pressure.value,
+                                dewpointTemp: f.dewpointTemperature.value }))}/>
                     </div>
                 </div>
             </section>
@@ -101,6 +102,7 @@ class Weather extends React.Component {
             case "Snow":
                 return "snowflake";
             
+            case "Drizzle":
             case "LightRain":
             case "Rain":
                 return "cloud-showers-heavy";
@@ -133,7 +135,31 @@ class WeatherReport extends React.Component {
                         <p className="is-size-2">{this.props.currentReport.wind + " m/s"}</p>
                     </div>
                 </div>
-                <table className="table is-fullwidth">
+                <table className="table is-fullwidth is-narrow is-striped">
+                    {this.props.showHead
+                        ? <thead>
+                            <tr>
+                                <td>Datum</td>
+                                <td>Väder</td>
+                                <td>Hög</td>
+                                <td>Låg</td>
+                                <td>Ned.</td>
+                                {this.props.reports[0].wind != null
+                                    ? <td>Vind</td>
+                                    : null
+                                }
+                                {this.props.reports[0].pressure != null
+                                    ? <td>Tryck</td>
+                                    : null
+                                }
+                                {this.props.reports[0].dewpointTemp != null
+                                    ? <td>Dagg</td>
+                                    : null
+                                }
+                            </tr>
+                        </thead>
+                        : null
+                    }
                     <tbody>
                         {this.props.reports.map((r, key) => <WeatherReportItem 
                             key={key}
@@ -142,7 +168,9 @@ class WeatherReport extends React.Component {
                             temperatureHigh={r.temperatureHigh} 
                             temperatureLow={r.temperatureLow} 
                             precipitation={r.precipitation}
-                            wind={r.wind}/>)}
+                            wind={r.wind}
+                            pressure={r.pressure}
+                            dewpointTemp={r.dewpointTemp}/>)}
                     </tbody>
                 </table>
             </div>
@@ -159,7 +187,18 @@ class WeatherReportItem extends React.Component {
                 <td className="has-text-weight-bold has-text-danger">{this.props.temperatureHigh + "°"}</td>
                 <td className="has-text-weight-bold has-text-info">{this.props.temperatureLow + "°"}</td>
                 <td>{this.props.precipitation + "mm"}</td>
-                <td>{this.props.wind + " m/s"}</td>
+                {this.props.wind != null
+                    ? <td>{this.props.wind + " m/s"}</td>
+                    : null
+                }
+                {this.props.pressure != null
+                    ? <td>{this.props.pressure + " hPa"}</td>
+                    : null
+                }
+                {this.props.dewpointTemp != null
+                    ? <td className="has-text-weight-bold">{this.props.dewpointTemp + "°"}</td>
+                    : null
+                }
             </tr>
         );
     }
