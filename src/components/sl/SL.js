@@ -59,7 +59,7 @@ class SL extends React.Component {
     }
 
     async getDepartures(siteId) {
-        fetch(`/departures?key=${process.env.REACT_APP_SL_REALTIME_API_KEY}&siteid=${siteId}&timewindow=${process.env.REACT_APP_SL_REALTIME_WINDOW_MINS}`)
+        fetch(`/departures?key=${process.env.REACT_APP_SL_REALTIME_API_KEY}&siteid=${siteId}&timewindow=${process.env.REACT_APP_SL_REALTIME_TIME_WINDOW_MINS}`)
             .then(response => response.json())
             .then(data => {
                 if (data.ResponseData != null)
@@ -76,7 +76,7 @@ class SL extends React.Component {
                                 timeToDeparture: buses[0].departure,
                                 departureInfo: buses[0].line + " mot " + buses[0].endStation
                             },
-                            comingDepartures: buses.splice(1, 4),
+                            comingDepartures: buses.splice(1, process.env.REACT_APP_SL_REALTIME_SHOW_AMOUNT),
                             deviations: this.state.deviations
                         });
                     }
