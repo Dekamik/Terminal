@@ -36,7 +36,7 @@ class Weather extends React.Component {
         return (
             <section className="section">
                 <div className="columns">
-                    <div className="column is-5">
+                    <div className="column">
                         <WeatherReport 
                             placeName={process.env.REACT_APP_YR_LOC1_NAME}
                             placeSymbol={process.env.REACT_APP_YR_LOC1_SYM}
@@ -48,7 +48,7 @@ class Weather extends React.Component {
                                 temperatureLow: f.minTemperature?.value ?? f.temperature?.value ?? "?",
                                 precipitation: f.rainDetails?.rain ?? "?"}))}/>
                     </div>
-                    <div className="column">
+                    <div className="column is-three-fifths">
                         <WeatherReport 
                             placeName={process.env.REACT_APP_YR_LOC2_NAME}
                             placeSymbol={process.env.REACT_APP_YR_LOC2_SYM}

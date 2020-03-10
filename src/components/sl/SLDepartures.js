@@ -2,7 +2,14 @@ import React from "react";
 
 class NextDeparture extends React.Component {
     render() {
-        // TODO: Fix the icons className.
+        if (this.props.timeToDeparture == null) {
+            return (
+                <div className="title has-text-centered">
+                    <p>Hämtar nästa avgång...</p>
+                    <progress className="progress" max="100"></progress>
+                </div>
+            );
+        }
         return (
             <div className="has-text-centered">
                 <p className="is-size-1">{this.props.timeToDeparture}</p>
@@ -14,6 +21,14 @@ class NextDeparture extends React.Component {
 
 class ComingDepartures extends React.Component {
     render() {
+        if (this.props.departures == null) {
+            return (
+                <div className="title has-text-centered">
+                    <p>Hämtar kommande avgångar...</p>
+                    <progress className="progress" max="100"></progress>
+                </div>
+            );
+        }
         return (
             <div>
                 <table className="table is-fullwidth is-narrow">

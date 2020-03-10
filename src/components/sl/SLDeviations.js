@@ -2,13 +2,19 @@ import React from "react";
 
 class Deviations extends React.Component {
 
-
-
     componentDidMount() {
         this.setState({isLoaded: true})
     }
 
     render() {
+        if (this.props.deviations == null) {
+            return (
+                <div className="title has-text-centered">
+                    <p>Laddar störningsdata...</p>
+                    <progress className="progress" max="100"></progress>
+                </div>
+            );
+        }
         return (
             <div>
                 <div className="tile is-ancestor" style={{'flexWrap': 'wrap'}}>
@@ -60,7 +66,7 @@ class DeviationModal extends React.Component {
                         {this.props.details}
                     </section>
                     <footer className="modal-card-foot">
-                        Påverkar följande färdmedel: {this.props.lines}
+                        Gäller följande: {this.props.lines}
                     </footer>
                 </div>
             </div>

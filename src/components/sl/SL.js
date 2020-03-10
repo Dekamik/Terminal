@@ -6,32 +6,18 @@ class SL extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            nextDeparture: {
-                timeToDeparture: "",
-                departureInfo: "",
-                mode: ""
-            },
-            comingDepartures: [],
-            deviations: []
-        };
+        this.state = {};
     }
 
     async componentDidMount() {
-        this.siteId = process.env.SL_PLACES_BUS_STOP_SITE_ID;
-        if (this.siteId == null) {
-            this.getBusstop()
-                .then(siteId => {console.log("Site ID hämtad"); this.siteId = siteId})
-                .then(() => {console.log("Avgångar hämtade"); this.getDepartures()})
-                .then(() => {console.log("Konstigheter hämtade"); this.getDeviations()});
-        }
-        else {
-            console.log("Sekundär");
-            this.getDepartures();
-            this.getDeviations();
-        }
+        this.getBusstop()
+            .then(siteId => {
+                this.siteId = siteId; 
+                this.getDepartures(siteId);
+            })
+            .then(this.getDeviations());
 
-        this.departuresInterval = setInterval(() => { this.getDepartures() }, process.env.REACT_APP_SL_REAL_TIME_REFRESH_MILLIS);
+        this.departuresInterval = setInterval(() => { this.getDepartures(this.siteId) }, process.env.REACT_APP_SL_REALTIME_REFRESH_MILLIS);
         this.deviationsInterval = setInterval(() => { this.getDeviations() }, process.env.REACT_APP_SL_DEVIATIONS_REFRESH_MILLIS);
     }
 
@@ -44,7 +30,7 @@ class SL extends React.Component {
         if (this.siteId == null) {
             return (
                 <section className="section">
-                    <p>Laddar SL-data...</p>
+                    <p>Hämtar hållplats...</p>
                     <progress className="progress" max="100"></progress>
                 </section>
             );
@@ -53,7 +39,7 @@ class SL extends React.Component {
             <section className="section">
                 <div className="columns is-vcentered">
                     <div className="column">
-                        <NextDeparture timeToDeparture={this.state.nextDeparture.timeToDeparture} departureInfo={this.state.nextDeparture.departureInfo} mode={this.state.nextDeparture.mode}/>
+                        <NextDeparture timeToDeparture={this.state.nextDeparture?.timeToDeparture} departureInfo={this.state.nextDeparture?.departureInfo} mode={this.state.nextDeparture?.mode}/>
                     </div>
                     <div className="column is-size-4">
                         <ComingDepartures departures={this.state.comingDepartures}/>
@@ -67,19 +53,16 @@ class SL extends React.Component {
     }
 
     async getBusstop() {
-        fetch("/busstop")
+        fetch(`/busstop?key=${process.env.REACT_APP_SL_PLACES_API_KEY}&searchstring=${process.env.REACT_APP_SL_PLACES_BUS_STOP_NAME}`)
             .then(response => response.json())
             .then(data => { this.siteId = data.ResponseData[0].SiteId; });
     }
 
-    async getDepartures() {
-        if (this.siteId == null) {
-            return;
-        }
-        fetch(`/departures?siteId=${this.siteId}`)
+    async getDepartures(siteId) {
+        fetch(`/departures?key=${process.env.REACT_APP_SL_REALTIME_API_KEY}&siteid=${siteId}&timewindow=${process.env.REACT_APP_SL_REALTIME_WINDOW_MINS}`)
             .then(response => response.json())
             .then(data => {
-                if (data.ResponseData !== undefined)
+                if (data.ResponseData != null)
                 {
                     let buses = [];
                     for (let bus of data.ResponseData.Buses) {
@@ -102,7 +85,7 @@ class SL extends React.Component {
     }
 
     async getDeviations() {
-        fetch(`/deviations`)
+        fetch(`/deviations?key=${process.env.REACT_APP_SL_DEVIATIONS_API_KEY}&lineNumber=${process.env.REACT_APP_SL_DEVIATIONS_LINES}&transportMode=${process.env.REACT_APP_SL_DEVIATIONS_MODES}`)
             .then(response => response.json())
             .then(data => {
                 let deviations = [];
