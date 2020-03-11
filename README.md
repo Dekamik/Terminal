@@ -1,68 +1,72 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a home terminal which shows date, time of day, weather for two locations, SL bus information for a selected bus stop and disruptions on specified lines and modes of transport.
 
-## Available Scripts
+## .env variables
 
-In the project directory, you can run:
+### SL Platsuppslag
+API for finding SL locations.
+API key required: [SL Platsuppslag](https://www.trafiklab.se/api/sl-platsuppslag)
 
-### `npm start`
+#### REACT_APP_SL_PLACES_API_KEY
+Your API key.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### REACT_APP_SL_PLACES_BUS_STOP_NAME
+The name of the bus stop to lookup. Will select the first search result.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### SL Realtidsinformation 4
+API for getting SL departures.
+API key required: [SL Realtidsinformation 4](https://www.trafiklab.se/api/sl-realtidsinformation-4)
 
-### `npm test`
+#### REACT_APP_SL_REALTIME_API_KEY
+Your API key.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### REACT_APP_SL_REALTIME_REFRESH_MILLIS
+Refresh interval in whole milliseconds.
 
-### `npm run build`
+#### REACT_APP_SL_REALTIME_TIME_WINDOW_MINS
+Max time window in whole minutes for planned departures.
+Maximum 60 minutes allowed.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### SL Störningsinformation 2
+API for getting SL deviations.
+API key required: [SL Störningsinformation 2](https://www.trafiklab.se/api/sl-storningsinformation-2)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+#### REACT_APP_SL_DEVIATIONS_API_KEY
+Your API key.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### REACT_APP_SL_DEVIATIONS_REFRESH_MILLIS
+Refresh interval in whole milliseconds.
 
-### `npm run eject`
+#### REACT_APP_SL_DEVIATIONS_LINES
+Comma-seperated string of line-numbers to look-up.
+Maximum 10 lines allowed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### REACT_APP_SL_DEVIATIONS_MODES
+Comma-seperated string of modes of transportations to look-up.
+Available modes: bus, metro, train, ship and tram.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### yr.no-forecast
+API for fetching weather information from api.met.no.
+No API key required.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### REACT_APP_YR_REFRESH_MILLIS
+Refresh interval in whole milliseconds.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### REACT_APP_YR_LOC#_NAME
+Display name of location.
 
-## Learn More
+#### REACT_APP_YR_LOC#_SYM
+Font Awesome icon for location.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### REACT_APP_YR_LOC#_LAT
+The location's latitude.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### REACT_APP_YR_LOC#_LON
+The location's longitude.
 
-### Code Splitting
+#### REACT_APP_YR_LOC1_MSL
+The location's height above sea-level in whole meters.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Misc.
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+#### API_PORT
+The port which the API dispatcher will run on.
