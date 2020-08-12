@@ -63,7 +63,7 @@ The location's latitude.
 #### REACT_APP_YR_LOC#_LON
 The location's longitude.
 
-#### REACT_APP_YR_LOC1_MSL
+#### REACT_APP_YR_LOC#_MSL
 The location's height above sea-level in whole meters.
 
 ### Misc.
